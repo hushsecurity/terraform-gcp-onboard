@@ -1,0 +1,14 @@
+variable "hush_org_id" {
+  description = "Hush Security organization ID."
+  type        = string
+}
+
+variable "hush_integration_id" {
+  description = "Hush Security integration ID."
+  type        = string
+}
+
+variable "gcp_organization_id" {
+  description = "Numeric GCP organization ID."
+  type        = string
+}
