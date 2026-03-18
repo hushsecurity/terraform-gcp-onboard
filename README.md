@@ -26,6 +26,7 @@ module "hush_security" {
 
   hush_org_id         = "org-us1234567890abc"
   hush_integration_id = "int-euKJQV2sHmnOUSFPRw"
+  gcp_organization_id = "123456789012"
 
   project_ids = ["my-project-id"]
 }
@@ -67,6 +68,7 @@ module "hush_security" {
 
   hush_org_id         = "org-us1234567890abc"
   hush_integration_id = "int-euKJQV2sHmnOUSFPRw"
+  gcp_organization_id = "123456789012"
 
   project_ids = ["my-project-id"]
 
@@ -76,6 +78,36 @@ module "hush_security" {
 }
 ```
 
+## Required Permissions
+
+The Terraform caller (user or service account running `terraform apply`) needs the following permissions:
+
+### On the service account project
+
+The project where the Hush service account is created (defaults to the first target project, or `service_account_project_id` if set).
+
+| Permission | Typical Role |
+|---|---|
+| `iam.serviceAccounts.create` | `roles/iam.serviceAccountAdmin` |
+| `serviceusage.services.enable` | `roles/serviceusage.serviceUsageAdmin` |
+
+### On each target project
+
+| Permission | Typical Role |
+|---|---|
+| `resourcemanager.projects.getIamPolicy` | `roles/resourcemanager.projectIamAdmin` |
+| `resourcemanager.projects.setIamPolicy` | `roles/resourcemanager.projectIamAdmin` |
+
+### On the organization
+
+| Permission | Typical Role |
+|---|---|
+| `resourcemanager.organizations.getIamPolicy` | `roles/resourcemanager.organizationAdmin` |
+| `resourcemanager.organizations.setIamPolicy` | `roles/resourcemanager.organizationAdmin` |
+| `resourcemanager.projects.list` | `roles/browser` (for auto-discovery) |
+
+> **Tip**: For auto-discovery mode (when `project_ids` is not set), the caller also needs `resourcemanager.projects.list` at the org level to discover active projects.
+
 ## Inputs
 
 ### Required Variables
@@ -84,14 +116,14 @@ module "hush_security" {
 |------|-------------|------|:--------:|
 | hush_org_id | Your Hush Security organization ID. | `string` | yes |
 | hush_integration_id | Your Hush Security integration ID. | `string` | yes |
+| gcp_organization_id | Numeric GCP organization ID. Scopes discovery and grants org-level browser. | `string` | yes |
 
 ### Project Selection
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| gcp_organization_id | Numeric GCP organization ID. Scopes discovery and grants org-level browser. | `string` | `null` | no |
 | service_account_project_id | Project to host the SA. Defaults to first target project. | `string` | `null` | no |
-| project_ids | Explicit list of project IDs to onboard. Null = auto-discover. | `list(string)` | `null` | no |
+| project_ids | Explicit list of project IDs to onboard. Null = auto-discover all active projects in the org. | `list(string)` | `null` | no |
 | excluded_project_ids | Projects to exclude from auto-discovery. | `list(string)` | `[]` | no |
 
 ### Feature Toggles
@@ -103,7 +135,7 @@ module "hush_security" {
 | gcs_tf_state_readonly | Enable GCS read-only access for Terraform state file scanning. | `roles/storage.objectViewer` | `bool` | `true` |
 | artifact_registry_readonly | Enable Artifact Registry read-only access for container image scanning. | `roles/artifactregistry.reader` | `bool` | `true` |
 
-> `roles/cloudasset.viewer` is always granted. Org-level `roles/browser` is granted when `gcp_organization_id` is provided.
+> `roles/cloudasset.viewer` is always granted. Org-level `roles/browser` is granted when using auto-discovery (`project_ids` is not set).
 
 ### Overrides
 
