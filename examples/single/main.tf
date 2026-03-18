@@ -4,6 +4,7 @@ module "hush_security" {
 
   hush_org_id         = var.hush_org_id
   hush_integration_id = var.hush_integration_id
+  gcp_organization_id = var.gcp_organization_id
 
   project_ids = [var.project_id]
 }
