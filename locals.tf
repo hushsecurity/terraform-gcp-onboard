@@ -11,6 +11,7 @@ locals {
   service_account_project_id = coalesce(var.service_account_project_id, local.target_project_ids[0])
 
   # Service account naming — tied to Hush integration ID
+  # lower() required: GCP account_id must be lowercase, integration IDs may contain uppercase
   service_account_id = "hush-${lower(var.hush_integration_id)}"
 
   # Service account identity
