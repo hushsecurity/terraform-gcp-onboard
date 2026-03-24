@@ -20,6 +20,10 @@ resource "google_organization_iam_member" "browser" {
   org_id = var.gcp_organization_id
   role   = "roles/browser"
   member = local.iam_member
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 resource "google_project_service" "required_apis" {
