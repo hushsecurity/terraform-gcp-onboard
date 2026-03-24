@@ -30,9 +30,8 @@ variable "gcp_organization_id" {
 }
 
 variable "service_account_project_id" {
-  description = "GCP project ID where the service account will be created. Defaults to the first target project."
+  description = "GCP project ID where the service account will be created."
   type        = string
-  default     = null
 }
 
 variable "project_ids" {

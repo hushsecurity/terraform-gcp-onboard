@@ -12,3 +12,8 @@ variable "gcp_organization_id" {
   description = "Numeric GCP organization ID."
   type        = string
 }
+
+variable "service_account_project_id" {
+  description = "GCP project ID where the service account will be created."
+  type        = string
+}
