@@ -7,8 +7,8 @@ locals {
 
   target_project_ids = var.project_ids != null ? var.project_ids : local.discovered_project_ids
 
-  # Service account placement: explicit or first target project
-  service_account_project_id = coalesce(var.service_account_project_id, local.target_project_ids[0])
+  # Service account placement: always explicit (required variable)
+  service_account_project_id = var.service_account_project_id
 
   # Service account naming — tied to Hush integration ID
   service_account_id = "hush-${lower(var.hush_integration_id)}"
