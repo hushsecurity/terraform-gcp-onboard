@@ -6,7 +6,5 @@ module "hush_security" {
   hush_integration_id = var.hush_integration_id
   gcp_organization_id = var.gcp_organization_id
 
-  service_account_project_id = var.service_account_project_id
-
   # project_ids is null by default → auto-discovery enabled
 }
