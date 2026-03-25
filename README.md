@@ -92,12 +92,12 @@ module "hush_security" {
 | hush_org_id | Your Hush Security organization ID. | `string` | yes |
 | hush_integration_id | Your Hush Security integration ID. | `string` | yes |
 | service_account_project_id | GCP project ID where the service account will be created. | `string` | yes |
+| gcp_organization_id | Numeric GCP organization ID. Scopes discovery and grants org-level roles/browser. | `string` | yes |
 
 ### Project Selection
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| gcp_organization_id | Numeric GCP organization ID. Scopes discovery and grants org-level browser. | `string` | `null` | no |
 | project_ids | Explicit list of project IDs to onboard. Null = auto-discover. | `list(string)` | `null` | no |
 | excluded_project_ids | Projects to exclude from auto-discovery. | `list(string)` | `[]` | no |
 
@@ -110,7 +110,7 @@ module "hush_security" {
 | gcs_tf_state_readonly | Enable GCS read-only access for Terraform state file scanning. | `roles/storage.objectViewer` | `bool` | `true` |
 | artifact_registry_readonly | Enable Artifact Registry read-only access for container image scanning. | `roles/artifactregistry.reader` | `bool` | `true` |
 
-> `roles/cloudasset.viewer` is always granted. Org-level `roles/browser` is granted when `gcp_organization_id` is provided.
+> `roles/cloudasset.viewer` and org-level `roles/browser` are always granted.
 
 ### Overrides
 

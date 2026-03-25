@@ -1,6 +1,6 @@
 data "google_projects" "active" {
   count  = var.project_ids == null ? 1 : 0
-  filter = var.gcp_organization_id != null ? "parent.id:${var.gcp_organization_id} lifecycleState:ACTIVE" : "lifecycleState:ACTIVE"
+  filter = "parent.id:${var.gcp_organization_id} lifecycleState:ACTIVE"
 }
 
 module "project_onboard" {
