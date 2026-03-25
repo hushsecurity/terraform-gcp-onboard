@@ -26,8 +26,10 @@ module "hush_security" {
 
   hush_org_id         = "org-us1234567890abc"
   hush_integration_id = "int-euKJQV2sHmnOUSFPRw"
+  gcp_organization_id = "123456789012"
 
-  project_ids = ["my-project-id"]
+  service_account_project_id = "my-project-id"
+  project_ids                = ["my-project-id"]
 }
 ```
 
@@ -40,6 +42,8 @@ module "hush_security" {
   hush_org_id         = "org-us1234567890abc"
   hush_integration_id = "int-euKJQV2sHmnOUSFPRw"
   gcp_organization_id = "123456789012"
+
+  service_account_project_id = "my-admin-project"
 
   # project_ids is null by default — discovers all active projects in the org
 }
@@ -55,7 +59,8 @@ module "hush_security" {
   hush_integration_id = "int-euKJQV2sHmnOUSFPRw"
   gcp_organization_id = "123456789012"
 
-  excluded_project_ids = ["sandbox-project", "temp-project"]
+  service_account_project_id = "my-admin-project"
+  excluded_project_ids       = ["sandbox-project", "temp-project"]
 }
 ```
 
@@ -67,8 +72,10 @@ module "hush_security" {
 
   hush_org_id         = "org-us1234567890abc"
   hush_integration_id = "int-euKJQV2sHmnOUSFPRw"
+  gcp_organization_id = "123456789012"
 
-  project_ids = ["my-project-id"]
+  service_account_project_id = "my-project-id"
+  project_ids                = ["my-project-id"]
 
   # Disable features you don't need
   secret_manager_readonly     = false
@@ -84,13 +91,13 @@ module "hush_security" {
 |------|-------------|------|:--------:|
 | hush_org_id | Your Hush Security organization ID. | `string` | yes |
 | hush_integration_id | Your Hush Security integration ID. | `string` | yes |
+| service_account_project_id | GCP project ID where the service account will be created. | `string` | yes |
 
 ### Project Selection
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | gcp_organization_id | Numeric GCP organization ID. Scopes discovery and grants org-level browser. | `string` | `null` | no |
-| service_account_project_id | Project to host the SA. Defaults to first target project. | `string` | `null` | no |
 | project_ids | Explicit list of project IDs to onboard. Null = auto-discover. | `list(string)` | `null` | no |
 | excluded_project_ids | Projects to exclude from auto-discovery. | `list(string)` | `[]` | no |
 
@@ -121,11 +128,11 @@ module "hush_security" {
 
 ## Integration
 
-After deploying:
+1. In the Hush Security dashboard, go to Integrations > GCP and create a new integration.
+2. Copy the Terraform snippet into your TF configuration.
+3. Run `terraform apply` to provision the service account and IAM bindings.
+4. Copy the `service_account_email` output and provide it in Hush Security UI to complete the integration.
 
-1. Copy the `service_account_email` output
-2. In the Hush Security dashboard, go to Integrations > GCP
-3. Create a new integration using the service account email
 
 Hush Security will use service account impersonation (keyless) to access the onboarded projects.
 
