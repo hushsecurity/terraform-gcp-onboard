@@ -12,7 +12,6 @@ resource "google_service_account_iam_member" "hush_impersonation" {
 }
 
 resource "google_organization_iam_member" "browser" {
-  count  = var.gcp_organization_id != null ? 1 : 0
   org_id = var.gcp_organization_id
   role   = "roles/browser"
   member = local.iam_member

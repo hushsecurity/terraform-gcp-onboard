@@ -19,12 +19,11 @@ variable "hush_integration_id" {
 }
 
 variable "gcp_organization_id" {
-  description = "Numeric GCP organization ID. When provided, scopes project discovery and grants org-level roles/browser. When null, discovers all visible projects."
+  description = "Numeric GCP organization ID. Scopes project discovery and grants org-level roles/browser."
   type        = string
-  default     = null
 
   validation {
-    condition     = var.gcp_organization_id == null || can(regex("^[0-9]+$", var.gcp_organization_id))
+    condition     = can(regex("^[0-9]+$", var.gcp_organization_id))
     error_message = "gcp_organization_id must be a numeric GCP organization ID."
   }
 }
