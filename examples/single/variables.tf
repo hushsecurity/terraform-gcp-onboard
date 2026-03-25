@@ -8,6 +8,11 @@ variable "hush_integration_id" {
   type        = string
 }
 
+variable "gcp_organization_id" {
+  description = "Numeric GCP organization ID."
+  type        = string
+}
+
 variable "project_id" {
   description = "GCP project ID to onboard."
   type        = string

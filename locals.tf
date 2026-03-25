@@ -11,6 +11,7 @@ locals {
   service_account_project_id = var.service_account_project_id
 
   # Service account naming — tied to Hush integration ID
+  # lower() required: GCP account_id must be lowercase, integration IDs may contain uppercase
   service_account_id = "hush-${lower(var.hush_integration_id)}"
 
   # Service account identity

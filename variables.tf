@@ -19,13 +19,12 @@ variable "hush_integration_id" {
 }
 
 variable "gcp_organization_id" {
-  description = "Numeric GCP organization ID. When provided, scopes project discovery and grants org-level roles/browser. When null, discovers all visible projects."
+  description = "Numeric GCP organization ID. Scopes project discovery and grants org-level roles/browser."
   type        = string
-  default     = null
 
   validation {
-    condition     = var.gcp_organization_id == null || can(regex("^[0-9]+$", var.gcp_organization_id))
-    error_message = "gcp_organization_id must be a numeric GCP organization ID."
+    condition     = can(regex("^[0-9]+$", var.gcp_organization_id))
+    error_message = "gcp_organization_id must be a numeric GCP organization ID (e.g., 123456789012)."
   }
 }
 
@@ -35,7 +34,7 @@ variable "service_account_project_id" {
 }
 
 variable "project_ids" {
-  description = "Explicit list of GCP project IDs to onboard. When null, auto-discovers all ACTIVE projects in the organization."
+  description = "Explicit list of GCP project IDs to onboard. When null, auto-discovers all ACTIVE projects in the organization (requires gcp_organization_id)."
   type        = list(string)
   default     = null
 }
