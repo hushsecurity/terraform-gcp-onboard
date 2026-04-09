@@ -12,3 +12,9 @@ variable "iam_roles" {
   description = "List of IAM roles to grant in this project."
   type        = list(string)
 }
+
+variable "required_apis" {
+  description = "List of GCP APIs to enable in this project."
+  type        = list(string)
+  default     = []
+}

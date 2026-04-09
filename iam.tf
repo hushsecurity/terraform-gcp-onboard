@@ -21,6 +21,7 @@ resource "google_project_service" "required_apis" {
   for_each = toset([
     "cloudresourcemanager.googleapis.com",
     "cloudasset.googleapis.com",
+    "policyanalyzer.googleapis.com",
   ])
 
   project            = local.service_account_project_id
