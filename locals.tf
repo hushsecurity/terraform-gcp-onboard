@@ -17,9 +17,9 @@ locals {
   iam_member = "serviceAccount:${google_service_account.hush.email}"
 
   # APIs that must be enabled on every monitored project
-  per_project_apis = [
+  per_project_apis = var.enable_per_project_apis ? [
     "policyanalyzer.googleapis.com",
-  ]
+  ] : []
 
   # Build role list from feature toggles
   iam_roles = compact([
