@@ -26,7 +26,7 @@ locals {
     "roles/cloudasset.viewer",
     var.iam_readonly ? "roles/iam.securityReviewer" : "",
     var.iam_readonly ? "roles/iam.roleViewer" : "",
-    var.iam_readonly ? "roles/logging.viewer" : "",
+    var.iam_readonly ? "roles/logging.privateLogViewer" : "",
     var.iam_readonly ? "roles/policyanalyzer.activityAnalysisViewer" : "",
     var.iam_readonly ? "roles/serviceusage.serviceUsageConsumer" : "",
     var.secret_manager_readonly ? "roles/secretmanager.viewer" : "",
