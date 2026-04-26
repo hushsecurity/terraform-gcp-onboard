@@ -40,6 +40,7 @@ locals {
 
   # APIs that must be enabled on every monitored project
   per_project_apis = var.enable_per_project_apis ? [
+    "monitoring.googleapis.com",
     "policyanalyzer.googleapis.com",
   ] : []
 
@@ -49,6 +50,7 @@ locals {
     var.iam_readonly ? "roles/iam.securityReviewer" : "",
     var.iam_readonly ? "roles/iam.roleViewer" : "",
     var.iam_readonly ? "roles/logging.viewer" : "",
+    var.iam_readonly ? "roles/monitoring.viewer" : "",
     var.iam_readonly ? "roles/policyanalyzer.activityAnalysisViewer" : "",
     var.iam_readonly ? "roles/serviceusage.serviceUsageConsumer" : "",
     var.secret_manager_readonly ? "roles/secretmanager.viewer" : "",
