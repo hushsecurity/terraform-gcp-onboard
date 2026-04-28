@@ -1,4 +1,7 @@
 locals {
+  # Whether to grant roles at the organization level
+  use_org_level = var.org_level_onboarding
+
   # All folder resource names (e.g. "folders/123") discovered at levels 1-2.
   all_folder_resource_names = var.project_ids == null ? distinct(concat(
     [for f in data.google_folders.level1[0].folders : f.name if f.state == "ACTIVE"],

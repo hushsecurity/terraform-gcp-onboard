@@ -1,3 +1,9 @@
+variable "org_level_onboarding" {
+  description = "If true, grant all required roles at the organization level instead of per project. Default is false (least-privilege, per-project)."
+  type        = bool
+  default     = false
+}
+
 variable "hush_org_id" {
   description = "Your Hush Security organization ID."
   type        = string
