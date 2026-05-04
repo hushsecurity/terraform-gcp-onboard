@@ -26,7 +26,9 @@ locals {
   )) : []
 
   target_project_ids = var.project_ids != null ? var.project_ids : [
-    for id in local.discovered_project_ids : id if !contains(var.excluded_project_ids, id)
+    for id in local.discovered_project_ids : id
+    if !contains(var.excluded_project_ids, id)
+    && length(regexall("^sys-[0-9]+$", id)) == 0
   ]
 
   # Service account placement: always explicit (required variable)
