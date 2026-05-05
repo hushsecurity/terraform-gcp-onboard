@@ -43,6 +43,7 @@ locals {
   # APIs that must be enabled on every monitored project
   per_project_apis = var.enable_per_project_apis ? [
     "monitoring.googleapis.com",
+    "policyanalyzer.googleapis.com",
   ] : []
 
   # Build role list from feature toggles

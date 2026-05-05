@@ -65,10 +65,11 @@ variable "gcs_tf_state_readonly" {
 
 variable "enable_per_project_apis" {
   description = <<-EOT
-    Enable required APIs (e.g. Monitoring) on each monitored project. If apply
-    fails with "Permission denied to list services" on some projects, set this
-    to false and re-apply. Projects where the APIs were already enabled will
-    not be affected.
+    Enable Policy Analyzer API on each monitored project. If apply fails with
+    "Permission denied to list services" on some projects, set this to false
+    and re-apply. Projects where the API was already enabled will not be
+    affected. Scanning falls back to Cloud Logging queries on projects where
+    Policy Analyzer is unavailable.
   EOT
   type        = bool
   default     = true
