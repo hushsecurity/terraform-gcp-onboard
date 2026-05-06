@@ -67,9 +67,7 @@ variable "enable_per_project_apis" {
   description = <<-EOT
     Enable Policy Analyzer API on each monitored project. If apply fails with
     "Permission denied to list services" on some projects, set this to false
-    and re-apply. Projects where the API was already enabled will not be
-    affected. Scanning falls back to Cloud Logging queries on projects where
-    Policy Analyzer is unavailable.
+    and re-apply.
   EOT
   type        = bool
   default     = true
