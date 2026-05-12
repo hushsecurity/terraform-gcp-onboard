@@ -10,5 +10,5 @@ output "service_account_id" {
 
 output "onboarded_project_ids" {
   description = "List of GCP project IDs that were onboarded."
-  value       = [for k, m in module.project_onboard : m.project_id]
+  value       = local.use_org_level ? local.target_project_ids : [for k, m in module.project_onboard : m.project_id]
 }
