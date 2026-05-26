@@ -4,8 +4,9 @@ variable "hush_org_id" {
 }
 
 variable "hush_integration_id" {
-  description = "Hush Security integration ID."
+  description = "Hush Security integration ID. Optional - generates unique name when omitted."
   type        = string
+  default     = null
 }
 
 variable "gcp_organization_id" {

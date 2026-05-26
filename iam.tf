@@ -1,7 +1,7 @@
 resource "google_service_account" "hush" {
   account_id   = local.service_account_id
   display_name = "Hush Security"
-  description  = "Integration with Hush Security (${var.hush_org_id} / ${var.hush_integration_id})"
+  description  = "Integration with Hush Security (${var.hush_org_id}${var.hush_integration_id != null ? " / ${var.hush_integration_id}" : ""})"
   project      = local.service_account_project_id
 }
 

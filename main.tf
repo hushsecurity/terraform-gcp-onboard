@@ -1,3 +1,8 @@
+resource "random_id" "suffix" {
+  count       = var.hush_integration_id == null ? 1 : 0
+  byte_length = 5
+}
+
 module "project_onboard" {
   source   = "./modules/project_onboard"
   for_each = toset(local.target_project_ids)
