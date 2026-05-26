@@ -8,6 +8,7 @@ Terraform module to integrate your GCP project(s) with Hush Security.
 |------|---------|
 | terraform | >= 1.3.0 |
 | google | >= 4.0 |
+| random | >= 3.0 |
 
 ## Deployment Modes
 
@@ -26,6 +27,27 @@ module "hush_security" {
 
   hush_org_id         = "org-us1234567890abc"
   hush_integration_id = "int-euKJQV2sHmnOUSFPRw"
+  gcp_organization_id = "123456789012"
+
+  service_account_project_id = "my-project-id"
+  project_ids                = ["my-project-id"]
+}
+```
+
+### Single Project with Hush Provider
+
+Using the Hush Terraform provider to create the integration and onboard module together in a single apply.
+
+```hcl
+resource "hush_gcp_integration" "main" {
+  name                  = "production-gcp"
+  service_account_email = module.hush_security.service_account_email
+}
+
+module "hush_security" {
+  source = "hushsecurity/onboard/gcp"
+
+  hush_org_id         = "org-us1234567890abc"
   gcp_organization_id = "123456789012"
 
   service_account_project_id = "my-project-id"
@@ -90,9 +112,14 @@ module "hush_security" {
 | Name | Description | Type | Required |
 |------|-------------|------|:--------:|
 | hush_org_id | Your Hush Security organization ID. | `string` | yes |
-| hush_integration_id | Your Hush Security integration ID. | `string` | yes |
 | service_account_project_id | GCP project ID where the service account will be created. | `string` | yes |
 | gcp_organization_id | Numeric GCP organization ID. Scopes discovery and grants org-level roles/browser. | `string` | yes |
+
+### Optional — Integration ID
+
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:--------:|
+| hush_integration_id | Hush Security integration ID. When null, a unique service account name is generated automatically. | `string` | `null` | no |
 
 ### Project Selection
 
