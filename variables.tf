@@ -9,11 +9,12 @@ variable "hush_org_id" {
 }
 
 variable "hush_integration_id" {
-  description = "Your Hush Security integration ID."
+  description = "Your Hush Security integration ID. When null, a unique service account name is generated automatically."
   type        = string
+  default     = null
 
   validation {
-    condition     = can(regex("^int-[a-zA-Z0-9]+$", var.hush_integration_id)) && length(var.hush_integration_id) >= 8 && length(var.hush_integration_id) <= 30
+    condition     = var.hush_integration_id == null || (can(regex("^int-[a-zA-Z0-9]+$", var.hush_integration_id)) && length(var.hush_integration_id) >= 8 && length(var.hush_integration_id) <= 30)
     error_message = "hush_integration_id must be a valid Hush integration ID (e.g., int-euKJQV2sHmnOUSFPRw)."
   }
 }

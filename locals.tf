@@ -34,8 +34,8 @@ locals {
   # Service account placement: always explicit (required variable)
   service_account_project_id = var.service_account_project_id
 
-  # Service account naming — tied to Hush integration ID
-  service_account_id = "hush-${lower(var.hush_integration_id)}"
+  # Service account naming — tied to Hush integration ID when provided, otherwise random
+  service_account_id = var.hush_integration_id != null ? "hush-${lower(var.hush_integration_id)}" : "hush-${random_id.suffix[0].hex}"
 
   # Service account identity
   iam_member = "serviceAccount:${google_service_account.hush.email}"
