@@ -41,10 +41,17 @@ locals {
   iam_member = "serviceAccount:${google_service_account.hush.email}"
 
   # APIs that must be enabled on every monitored project
-  per_project_apis = var.enable_per_project_apis ? [
-    "monitoring.googleapis.com",
-    "policyanalyzer.googleapis.com",
-  ] : []
+  per_project_apis = distinct(concat(
+    var.enable_per_project_apis ? [
+      "monitoring.googleapis.com",
+      "policyanalyzer.googleapis.com",
+    ] : [],
+    var.agents_readonly ? [
+      "aiplatform.googleapis.com",
+      # Also enabled so agents_readonly is self-contained when enable_per_project_apis is off.
+      "policyanalyzer.googleapis.com",
+    ] : [],
+  ))
 
   # Build role list from feature toggles
   iam_roles = compact([
@@ -59,5 +66,12 @@ locals {
     var.secret_manager_readonly ? "roles/secretmanager.secretAccessor" : "",
     var.gcs_tf_state_readonly ? "roles/storage.objectViewer" : "",
     var.artifact_registry_readonly ? "roles/artifactregistry.reader" : "",
+    var.agents_readonly ? "roles/aiplatform.viewer" : "", # Vertex AI
+    var.agents_readonly ? "roles/serviceusage.serviceUsageConsumer" : "",
+    # Also granted so agents_readonly is self-contained and works when iam_readonly
+    # is off (deduped by compact/toset).
+    var.agents_readonly ? "roles/iam.securityReviewer" : "",
+    var.agents_readonly ? "roles/logging.viewer" : "",
+    var.agents_readonly ? "roles/policyanalyzer.activityAnalysisViewer" : "",
   ])
 }
