@@ -48,6 +48,7 @@ locals {
     ] : [],
     var.agents_readonly ? [
       "aiplatform.googleapis.com",
+      "apihub.googleapis.com",
       # Also enabled so agents_readonly is self-contained when enable_per_project_apis is off.
       "policyanalyzer.googleapis.com",
     ] : [],
@@ -67,6 +68,7 @@ locals {
     var.gcs_tf_state_readonly ? "roles/storage.objectViewer" : "",
     var.artifact_registry_readonly ? "roles/artifactregistry.reader" : "",
     var.agents_readonly ? "roles/aiplatform.viewer" : "", # Vertex AI
+    var.agents_readonly ? "roles/apihub.viewer" : "",     # API Hub
     var.agents_readonly ? "roles/serviceusage.serviceUsageConsumer" : "",
     # Also granted so agents_readonly is self-contained and works when iam_readonly
     # is off (deduped by compact/toset).
