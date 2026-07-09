@@ -136,6 +136,7 @@ module "hush_security" {
 | secret_manager_readonly | Enable Secret Manager read-only access. | `roles/secretmanager.viewer`, `roles/secretmanager.secretAccessor` | `bool` | `true` |
 | gcs_tf_state_readonly | Enable GCS read-only access for Terraform state file scanning. | `roles/storage.objectViewer` | `bool` | `true` |
 | artifact_registry_readonly | Enable Artifact Registry read-only access for container image scanning. | `roles/artifactregistry.reader` | `bool` | `true` |
+| agents_readonly | Enable Vertex AI read-only access for agent discovery. Self-contained — also grants the IAM/logging/policy-analyzer read roles and APIs it needs, so it works independently of `iam_readonly` / `enable_per_project_apis`. | `roles/aiplatform.viewer`, `roles/serviceusage.serviceUsageConsumer`, `roles/iam.securityReviewer`, `roles/logging.viewer`, `roles/policyanalyzer.activityAnalysisViewer` | `bool` | `false` |
 
 > `roles/cloudasset.viewer` and org-level `roles/browser` are always granted.
 

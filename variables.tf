@@ -64,6 +64,12 @@ variable "gcs_tf_state_readonly" {
   default     = true
 }
 
+variable "agents_readonly" {
+  description = "Enable Vertex AI + API Hub read-only access for agent/MCP discovery."
+  type        = bool
+  default     = false
+}
+
 variable "enable_per_project_apis" {
   description = <<-EOT
     Enable Policy Analyzer API on each monitored project. If apply fails with
