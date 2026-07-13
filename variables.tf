@@ -64,10 +64,16 @@ variable "gcs_tf_state_readonly" {
   default     = true
 }
 
-variable "agents_readonly" {
-  description = "Enable Vertex AI + API Hub read-only access for agent/MCP discovery."
+variable "vertex_agents_readonly" {
+  description = "Enable Vertex AI read-only access for AI-agent discovery. Self-contained — also grants the IAM/logging/policy-analyzer read roles and APIs it needs, so it works independently of iam_readonly / enable_per_project_apis."
   type        = bool
-  default     = false
+  default     = true
+}
+
+variable "mcp_registry_readonly" {
+  description = "Enable API Hub read-only access for MCP-registry discovery. Self-contained — also grants the IAM/logging/policy-analyzer read roles and APIs it needs, so it works independently of iam_readonly / enable_per_project_apis."
+  type        = bool
+  default     = true
 }
 
 variable "enable_per_project_apis" {
