@@ -40,18 +40,18 @@ locals {
   # Service account identity
   iam_member = "serviceAccount:${google_service_account.hush.email}"
 
+  # extra roles/APIs shared by both agent features
+  agents_enabled = var.vertex_agents_readonly || var.mcp_registry_readonly
+
   # APIs that must be enabled on every monitored project
   per_project_apis = distinct(concat(
     var.enable_per_project_apis ? [
       "monitoring.googleapis.com",
       "policyanalyzer.googleapis.com",
     ] : [],
-    var.agents_readonly ? [
-      "aiplatform.googleapis.com",
-      "apihub.googleapis.com",
-      # Also enabled so agents_readonly is self-contained when enable_per_project_apis is off.
-      "policyanalyzer.googleapis.com",
-    ] : [],
+    var.vertex_agents_readonly ? ["aiplatform.googleapis.com"] : [],
+    var.mcp_registry_readonly ? ["apihub.googleapis.com"] : [],
+    local.agents_enabled ? ["policyanalyzer.googleapis.com"] : [],
   ))
 
   # Build role list from feature toggles
@@ -67,13 +67,11 @@ locals {
     var.secret_manager_readonly ? "roles/secretmanager.secretAccessor" : "",
     var.gcs_tf_state_readonly ? "roles/storage.objectViewer" : "",
     var.artifact_registry_readonly ? "roles/artifactregistry.reader" : "",
-    var.agents_readonly ? "roles/aiplatform.viewer" : "", # Vertex AI
-    var.agents_readonly ? "roles/apihub.viewer" : "",     # API Hub
-    var.agents_readonly ? "roles/serviceusage.serviceUsageConsumer" : "",
-    # Also granted so agents_readonly is self-contained and works when iam_readonly
-    # is off (deduped by compact/toset).
-    var.agents_readonly ? "roles/iam.securityReviewer" : "",
-    var.agents_readonly ? "roles/logging.viewer" : "",
-    var.agents_readonly ? "roles/policyanalyzer.activityAnalysisViewer" : "",
+    var.vertex_agents_readonly ? "roles/aiplatform.viewer" : "", # Vertex AI
+    var.mcp_registry_readonly ? "roles/apihub.viewer" : "",      # API Hub
+    local.agents_enabled ? "roles/serviceusage.serviceUsageConsumer" : "",
+    local.agents_enabled ? "roles/iam.securityReviewer" : "",
+    local.agents_enabled ? "roles/logging.viewer" : "",
+    local.agents_enabled ? "roles/policyanalyzer.activityAnalysisViewer" : "",
   ])
 }
