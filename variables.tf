@@ -76,6 +76,12 @@ variable "mcp_registry_readonly" {
   default     = true
 }
 
+variable "entitlements_readonly" {
+  description = "Enable IAM entitlement (over-privilege) scanning. Currently needs no roles beyond those granted unconditionally below; this toggle exists so the feature can be disabled per integration."
+  type        = bool
+  default     = true
+}
+
 variable "enable_per_project_apis" {
   description = <<-EOT
     Enable Policy Analyzer API on each monitored project. If apply fails with
