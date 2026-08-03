@@ -109,7 +109,7 @@ variable "mcp_registry_readonly" {
 }
 
 variable "entitlements_readonly" {
-  description = "Enable IAM entitlement (over-privilege) scanning. Currently needs no roles beyond those granted unconditionally below; this toggle exists so the feature can be disabled per integration."
+  description = "Enable IAM entitlement (over-privilege) scanning. Grants roles/iam.roleViewer to read custom role definitions; bindings are read through roles/cloudasset.viewer, which is always granted."
   type        = bool
   default     = true
 }
