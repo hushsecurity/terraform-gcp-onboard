@@ -69,6 +69,7 @@ locals {
     var.artifact_registry_readonly ? "roles/artifactregistry.reader" : "",
     var.vertex_agents_readonly ? "roles/aiplatform.viewer" : "", # Vertex AI
     var.mcp_registry_readonly ? "roles/apihub.viewer" : "",      # API Hub
+    var.entitlements_readonly ? "roles/iam.roleViewer" : "",     # custom role definitions
     local.agents_enabled ? "roles/serviceusage.serviceUsageConsumer" : "",
     local.agents_enabled ? "roles/iam.securityReviewer" : "",
     local.agents_enabled ? "roles/logging.viewer" : "",
