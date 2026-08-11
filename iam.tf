@@ -3,6 +3,15 @@ resource "google_service_account" "hush" {
   display_name = "Hush Security"
   description  = "Integration with Hush Security (${var.hush_org_id}${var.hush_integration_id != null ? " / ${var.hush_integration_id}" : ""})"
   project      = local.service_account_project_id
+
+  # the module's root anchor also carries cross-variable validation
+  # (terraform_data would need >= 1.4; the module supports >= 1.3)
+  lifecycle {
+    precondition {
+      condition     = !var.vertex_activity_readonly || var.vertex_agents_readonly
+      error_message = "vertex_activity_readonly requires vertex_agents_readonly: agent activity joins to the agent inventory it discovers."
+    }
+  }
 }
 
 resource "google_service_account_iam_member" "hush_impersonation" {

@@ -137,6 +137,18 @@ module "hush_security" {
 | gcs_tf_state_readonly | Enable GCS read-only access for Terraform state file scanning. | `roles/storage.objectViewer` | `bool` | `true` |
 | artifact_registry_readonly | Enable Artifact Registry read-only access for container image scanning. | `roles/artifactregistry.reader` | `bool` | `true` |
 | vertex_agents_readonly | Enable Vertex AI read-only access for AI-agent discovery. Self-contained — also grants the IAM/logging/policy-analyzer read roles and APIs it needs, so it works independently of `iam_readonly` / `enable_per_project_apis`. | `roles/aiplatform.viewer`, `roles/serviceusage.serviceUsageConsumer`, `roles/iam.securityReviewer`, `roles/logging.viewer`, `roles/policyanalyzer.activityAnalysisViewer` | `bool` | `true` |
+| vertex_activity_readonly | Enable read access to Vertex AI agent-activity audit logs. Creates a log view scoped to aiplatform Data Access entries and grants access to **that view only** — no project-wide private-log read. With `manage_vertex_audit_config`, also turns on Data Access audit logs for `aiplatform.googleapis.com` plus a `_Default`-sink exclusion that drops the non-agent aiplatform entries before they are billed. **Off by default — audit-log ingestion is billable.** Requires `vertex_agents_readonly`. | `roles/logging.viewAccessor` (on the `hush-vertex-activity` view) | `bool` | `false` |
+| manage_vertex_audit_config | Let the module manage the aiplatform audit config for `vertex_activity_readonly`. **The audit config is authoritative for the aiplatform service**: it replaces any pre-existing aiplatform audit config (other services untouched) and is removed on disable/destroy. Set to `false` to take only the read grant, e.g. when Data Access logging is enforced by org policy. | — | `bool` | `true` |
+| exclude_non_agent_vertex_logs | Add a `_Default`-sink exclusion dropping the aiplatform Data Access entries Hush does not read, so they are not billed. **Set to `false` if you already collect aiplatform Data Access logs** (your own audit config or org-wide `allServices`) — excluded entries are never stored and cannot be recovered. | — | `bool` | `true` |
+
+> Both mutations follow `enable_per_project_apis` and skip the service-account
+> project, like the per-project APIs.
+>
+> Migrating from the gcloud onboarding script? It creates the same
+> `hush-vertex-non-agent-data-access` exclusion, so terraform will fail with
+> `alreadyExists` — import it first
+> (`terraform import 'module.project_onboard["PROJECT"].google_logging_project_exclusion.vertex_non_agent_data_access[0] projects/PROJECT/exclusions/hush-vertex-non-agent-data-access'`)
+> or delete it and let terraform recreate it.
 | mcp_registry_readonly | Enable API Hub read-only access for MCP-registry discovery. Self-contained (same read roles/APIs as above). | `roles/apihub.viewer`, `roles/serviceusage.serviceUsageConsumer`, `roles/iam.securityReviewer`, `roles/logging.viewer`, `roles/policyanalyzer.activityAnalysisViewer` | `bool` | `true` |
 
 > `roles/cloudasset.viewer` and org-level `roles/browser` are always granted.

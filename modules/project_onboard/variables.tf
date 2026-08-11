@@ -18,3 +18,21 @@ variable "required_apis" {
   type        = list(string)
   default     = []
 }
+
+variable "enable_vertex_audit_logs" {
+  description = "Turn on Data Access audit logs for aiplatform.googleapis.com in this project (required for Vertex agent-activity monitoring; audit-log ingestion is billable)."
+  type        = bool
+  default     = false
+}
+
+variable "create_vertex_billing_exclusion" {
+  description = "Add a _Default-sink exclusion dropping the aiplatform Data Access entries Hush does not read. Must be false for projects already collecting aiplatform Data Access logs."
+  type        = bool
+  default     = false
+}
+
+variable "grant_vertex_activity_read" {
+  description = "Create a log view scoped to aiplatform Data Access entries and grant the Hush service account read access to that view only."
+  type        = bool
+  default     = false
+}

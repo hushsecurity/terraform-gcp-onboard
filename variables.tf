@@ -65,7 +65,39 @@ variable "gcs_tf_state_readonly" {
 }
 
 variable "vertex_agents_readonly" {
-  description = "Enable Vertex AI read-only access for AI-agent discovery. Self-contained — also grants the IAM/logging/policy-analyzer read roles and APIs it needs, so it works independently of iam_readonly / enable_per_project_apis."
+  description = "Enable Vertex AI read-only access for AI-agent discovery. Self-contained — also grants the IAM/logging/policy-analyzer read roles and APIs it needs, so it works independently of iam_readonly / enable_per_project_apis. Free: read roles only."
+  type        = bool
+  default     = true
+}
+
+variable "vertex_activity_readonly" {
+  description = "Enable read access to Vertex AI agent-activity audit logs: creates a log view scoped to aiplatform Data Access entries and grants roles/logging.viewAccessor on that view only (no project-wide private-log read), and — with manage_vertex_audit_config — turns on Data Access audit logs for aiplatform.googleapis.com on monitored projects. Off by default: audit-log ingestion is billable. Requires vertex_agents_readonly, which discovers the agents the activity joins to."
+  type        = bool
+  default     = false
+}
+
+variable "manage_vertex_audit_config" {
+  description = <<-EOT
+    With vertex_activity_readonly, manage the aiplatform.googleapis.com audit
+    config (DATA_READ) on monitored projects. Set to false to take the read
+    grant without the module mutating audit configs (e.g. when Data Access
+    logging is already enforced by org policy). NOTE: the audit config is
+    authoritative for the aiplatform service — it replaces any pre-existing
+    aiplatform audit config (other services are untouched), and disabling the
+    toggle or destroying removes it entirely.
+  EOT
+  type        = bool
+  default     = true
+}
+
+variable "exclude_non_agent_vertex_logs" {
+  description = <<-EOT
+    With vertex_activity_readonly, add a _Default-sink exclusion dropping the
+    aiplatform Data Access entries Hush does not read, so they are not billed.
+    MUST be false for anyone already collecting aiplatform Data Access logs
+    (own audit config or org-wide allServices) — excluded entries are never
+    stored and cannot be recovered.
+  EOT
   type        = bool
   default     = true
 }
