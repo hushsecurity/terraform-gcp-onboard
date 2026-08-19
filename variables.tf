@@ -9,7 +9,10 @@ variable "hush_org_id" {
 }
 
 variable "hush_integration_id" {
-  description = "Your Hush Security integration ID. When null, a unique service account name is generated automatically."
+  description = <<-EOT
+    Your Hush Security integration ID. When null, a unique service account name
+    is generated automatically.
+  EOT
   type        = string
   default     = null
 
@@ -20,7 +23,10 @@ variable "hush_integration_id" {
 }
 
 variable "gcp_organization_id" {
-  description = "Numeric GCP organization ID. Scopes project discovery and grants org-level roles/browser."
+  description = <<-EOT
+    Numeric GCP organization ID. Scopes project discovery and grants org-level
+    roles/browser.
+  EOT
   type        = string
 
   validation {
@@ -35,13 +41,19 @@ variable "service_account_project_id" {
 }
 
 variable "project_ids" {
-  description = "Explicit list of GCP project IDs to onboard. When null, auto-discovers all ACTIVE projects in the organization."
+  description = <<-EOT
+    Explicit list of GCP project IDs to onboard. When null, auto-discovers all
+    ACTIVE projects in the organization.
+  EOT
   type        = list(string)
   default     = null
 }
 
 variable "excluded_project_ids" {
-  description = "Project IDs to exclude from auto-discovery. Ignored when project_ids is provided."
+  description = <<-EOT
+    Project IDs to exclude from auto-discovery. Ignored when project_ids is
+    provided.
+  EOT
   type        = list(string)
   default     = []
 }
@@ -65,13 +77,31 @@ variable "gcs_tf_state_readonly" {
 }
 
 variable "vertex_agents_readonly" {
-  description = "Enable Vertex AI read-only access for AI-agent discovery. Self-contained — also grants the IAM/logging/policy-analyzer read roles and APIs it needs, so it works independently of iam_readonly / enable_per_project_apis."
+  description = <<-EOT
+    Enable Vertex AI read-only access for AI-agent discovery. Self-contained —
+    also grants the IAM/logging/policy-analyzer read roles and APIs it needs, so
+    it works independently of iam_readonly / enable_per_project_apis.
+  EOT
   type        = bool
   default     = true
 }
 
 variable "mcp_registry_readonly" {
-  description = "Enable API Hub read-only access for MCP-registry discovery. Self-contained — also grants the IAM/logging/policy-analyzer read roles and APIs it needs, so it works independently of iam_readonly / enable_per_project_apis."
+  description = <<-EOT
+    Enable API Hub read-only access for MCP-registry discovery. Self-contained —
+    also grants the IAM/logging/policy-analyzer read roles and APIs it needs, so
+    it works independently of iam_readonly / enable_per_project_apis.
+  EOT
+  type        = bool
+  default     = true
+}
+
+variable "entitlements_readonly" {
+  description = <<-EOT
+    Enable IAM entitlement (over-privilege) scanning. Currently needs no roles
+    beyond those granted unconditionally below; this toggle exists so the
+    feature can be disabled per integration.
+  EOT
   type        = bool
   default     = true
 }
@@ -87,13 +117,18 @@ variable "enable_per_project_apis" {
 }
 
 variable "artifact_registry_readonly" {
-  description = "Enable Artifact Registry read-only access for container image scanning."
+  description = <<-EOT
+    Enable Artifact Registry read-only access for container image scanning.
+  EOT
   type        = bool
   default     = true
 }
 
 variable "hush_service_account_email" {
-  description = "Email of the Hush Security service account that will impersonate the onboarding SA."
+  description = <<-EOT
+    Email of the Hush Security service account that will impersonate the
+    onboarding SA.
+  EOT
   type        = string
   default     = "hushsecurity@hush-security-integration.iam.gserviceaccount.com"
 
